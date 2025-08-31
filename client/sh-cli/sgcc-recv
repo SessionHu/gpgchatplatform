@@ -9,13 +9,13 @@ your_email="$1"
 offset="$2"
 [[ -z "$offset" ]] && offset=0
 
-[[ -z "$HTTP_HOST" ]] && HTTP_HOST='0:8080'
+[[ -z "$HTTP_PREFIX" ]] && HTTP_PREFIX='http://0:8080'
 
-message_ids=`curl "http://${HTTP_HOST}/cgi-bin/list.d" -H "x-sgcc-to: $your_email" -v`
+message_ids=`curl "${HTTP_PREFIX}/cgi-bin/list.d" -H "x-sgcc-to: $your_email" -vL`
 
 for msgid in $message_ids; do
-  curl "http://${HTTP_HOST}/cgi-bin/recv.d" \
+  curl "${HTTP_PREFIX}/cgi-bin/recv.d" \
     -H "x-sgcc-to: $your_email" \
     -H "x-sgcc-fts: $msgid" \
-    -sv | gpg -d
+    -vL | gpg -d
 done

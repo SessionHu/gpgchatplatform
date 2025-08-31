@@ -5,11 +5,12 @@ if [[ "$#" -ne 1 ]]; then
   exit 1
 fi
 
-[[ -z "$HTTP_HOST" ]] && HTTP_HOST='0:8080'
+[[ -z "$HTTP_PREFIX" ]] && HTTP_PREFIX='http://0:8080'
 
 gpg -vesr "$1" <&0 | \
-curl "http://${HTTP_HOST}/cgi-bin/send" \
+curl "${HTTP_PREFIX}/cgi-bin/send" \
   -X POST \
   -H "x-sgcc-to: $1" \
   -H 'content-type: application/pgp-encrypted' \
-  --data-binary @/dev/stdin
+  --data-binary @/dev/stdin \
+  -vL
