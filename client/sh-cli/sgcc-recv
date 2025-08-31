@@ -14,7 +14,7 @@ offset="$2"
 message_ids=`curl "http://${HTTP_HOST}/cgi-bin/list.d" -H "x-sgcc-to: $your_email" -v`
 
 for msgid in $message_ids; do
-  curl 'http://0:8080/cgi-bin/recv.d' \
+  curl "http://${HTTP_HOST}/cgi-bin/recv.d" \
     -H "x-sgcc-to: $your_email" \
     -H "x-sgcc-fts: $msgid" \
     -sv | gpg -d
