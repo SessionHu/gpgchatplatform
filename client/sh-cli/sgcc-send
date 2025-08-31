@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ "$#" -ne 1 ]]; then
+  echo "Usage: $0 <recipient_email>"
+  exit 1
+fi
+
+[[ -z "$HTTP_HOST" ]] && HTTP_HOST='0:8080'
+
+gpg -vesr "$1" <&0 | \
+curl "http://${HTTP_HOST}/cgi-bin/send" \
+  -X POST \
+  -H "x-sgcc-to: $1" \
+  -H 'content-type: application/pgp-encrypted' \
+  --data-binary @/dev/stdin

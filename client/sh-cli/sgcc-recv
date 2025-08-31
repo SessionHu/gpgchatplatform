@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $0 <your_email> [offset]"
+  exit 1
+fi
+
+your_email="$1"
+offset="$2"
+[[ -z "$offset" ]] && offset=0
+
+[[ -z "$HTTP_HOST" ]] && HTTP_HOST='0:8080'
+
+message_ids=`curl "http://${HTTP_HOST}/cgi-bin/list.d" -H "x-sgcc-to: $your_email" -v`
+
+for msgid in $message_ids; do
+  curl 'http://0:8080/cgi-bin/recv.d' \
+    -H "x-sgcc-to: $your_email" \
+    -H "x-sgcc-fts: $msgid" \
+    -sv | gpg -d
+done
