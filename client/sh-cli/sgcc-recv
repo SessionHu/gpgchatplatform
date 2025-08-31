@@ -17,5 +17,5 @@ for msgid in $message_ids; do
   curl "${HTTP_PREFIX}/cgi-bin/recv.d" \
     -H "x-sgcc-to: $your_email" \
     -H "x-sgcc-fts: $msgid" \
-    -vL | gpg -d
+    -vL | gpg -dv
 done
