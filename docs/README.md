@@ -45,7 +45,7 @@ This endpoint is used to retrieve a list of message IDs for a specific recipient
 
       * `X-SGCC-To`: The recipient's email address (e.g., `ex@mple.com`).
 
-  * **Response Body**: A list of message IDs, separated by spaces. A message ID is a nano-level timestamp.
+  * **Response Body**: A list of message IDs, separated by line feeds (`\n`). A message ID is a nano-level timestamp.
 
   * **Example (using `curl`)**:
 
