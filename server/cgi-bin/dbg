@@ -1,4 +1,0 @@
-#!/bin/sh
-echo $SERVER_PROTOCOL' 200 OK'
-echo 'vontent-type: text/plain\n'
-env
