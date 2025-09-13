@@ -1,4 +1,4 @@
-#!/bin/env rdmd
+module internal.watch.watch;
 
 import std.stdio;
 import std.process;
@@ -13,6 +13,8 @@ import std.conv;
 import std.typecons;
 
 import internal.utils;
+
+extern(C) int wait_for_new_file(const char* dir_path, int timeout_ms);
 
 @safe
 BigInt getOffsetFromEnv() {
@@ -38,12 +40,14 @@ BigInt[] getCleanBoxFullList(string dirPath, size_t maxCount = 128) {
   return allFiles[filesToRemove .. $].map!(f => f[0]).array;
 }
 
-string getBoxItems(string email) {
+string getBoxItems(string email, bool retry = false) {
   const boxdir = "../../data/box/" ~ cast(string)Base64.encode(cast(ubyte[])email);
   if (!boxdir.exists) return "\n";
   const tss = getCleanBoxFullList(boxdir);
   const off = getOffsetFromEnv();
-  return tss.filter!(e => e > off).map!(to!string).join('\n') ~ '\n';
+  const lzt = tss.filter!(e => e > off).map!(to!string).array;
+  return lzt.length == 0 && retry && wait_for_new_file(boxdir.ptr, 10_000) == 1 ?
+    getBoxItems(email) : (lzt.join("\n") ~ '\n');
 }
 
 int main() {
@@ -55,5 +59,5 @@ int main() {
   const email = environment.get("HTTP_X_SGCC_TO");
   if (!checkEmail(email))
     return writeResp("400 Bad Request", "", "X-SGCC-To in header fields is not an Email address\n");
-  return writeResp("200 OK", "", getBoxItems(email));
+  return writeResp("200 OK", "", getBoxItems(email, true));
 }

@@ -1,0 +1,3 @@
+#!/bin/sh
+make --directory=./internal --quiet
+exec ./internal/watch/watch
