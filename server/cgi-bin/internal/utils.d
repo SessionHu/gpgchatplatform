@@ -13,14 +13,17 @@ bool checkEmail(string email) {
   return !(email is null) && email.isEmail;
 }
 
-@trusted
+@safe
 string dateHeaderFieldNowWithCRLF() {
-  time_t epochSeconds = 0;
-  time(&epochSeconds);
-  tm timeStruct = {};
-  gmtime_r(&epochSeconds, &timeStruct);
   char[96] buffer;
-  const l = strftime(buffer.ptr, buffer.length, "Date: %a, %d %b %Y %H:%M:%S GMT\r\n", &timeStruct);
+  size_t l;
+  () @trusted @nogc {
+    time_t epochSeconds = 0;
+    time(&epochSeconds);
+    tm timeStruct = {};
+    gmtime_r(&epochSeconds, &timeStruct);
+    l = strftime(buffer.ptr, buffer.length, "Date: %a, %d %b %Y %H:%M:%S GMT\r\n", &timeStruct);
+  }();
   return to!string(buffer[0..l]);
 }
 
