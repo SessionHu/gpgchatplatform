@@ -59,5 +59,9 @@ int main() {
   const email = environment.get("HTTP_X_SGCC_TO");
   if (!checkEmail(email))
     return writeResp("400 Bad Request", "", "X-SGCC-To in header fields is not an Email address\n");
-  return writeResp("200 OK", "", getBoxItems(email, true));
+  try {
+    return writeResp("200 OK", "", getBoxItems(email, true));
+  } catch (Exception e) {
+    return writeResp("500 Internal Server Error", "", to!string(e));
+  }
 }
