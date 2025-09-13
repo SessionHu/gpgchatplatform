@@ -31,9 +31,9 @@ This endpoint is used to send an encrypted message to a recipient.
 
 ## 2\. 列出消息 (Listing Messages)
 
-This endpoint is used to retrieve a list of message IDs for a specific recipient.
+This long-polling endpoint is used to retrieve a list of message IDs for a specific recipient.
 
-  * **URI**: `/cgi-bin/list.d`
+  * **URI**: `/cgi-bin/watch`
 
   * **Method**: `GET`
 
@@ -50,7 +50,7 @@ This endpoint is used to retrieve a list of message IDs for a specific recipient
   * **Example (using `curl`)**:
 
     ```bash
-    curl "http://0:8080/cgi-bin/list.d" -H "X-SGCC-To: ex@mple.com" -vL
+    curl "http://0:8080/cgi-bin/watch" -H "X-SGCC-To: ex@mple.com" -vL
     ```
 
 ## 3\. 接收消息 (Receiving a Message)
@@ -80,4 +80,5 @@ This endpoint is used to retrieve a specific encrypted message by its ID.
 ---
 
 Copyright (C) 2025 SessionHu
+
 This document is licensed under the CC BY-NC-SA 4.0 International.
