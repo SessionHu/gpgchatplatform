@@ -16,20 +16,28 @@ EOF
   echo "$SERVER_PROTOCOL 400 Bad Request"
 elif [[ -n "$CONTENT_TYPE" ]] && [[ "$CONTENT_TYPE" != "application/octet-stream" ]] && [[ "$CONTENT_TYPE" != 'text/plain' ]] && [[ "$CONTENT_TYPE" != "application/pgp-encrypted" ]]; then
   echo "$SERVER_PROTOCOL 415 Unsupported Media Type"
+  cat > $resp << EOF
+Content-Type in header fields is not supported
+EOF
 elif [[ "$HTTP_CONTENT_LENGTH" -gt 1024 ]]; then
   echo "$SERVER_PROTOCOL 413 Request Entity Too Large"
+  cat > $resp << EOF
+Content-Length in header fields is too large (>1024 bytes)
+EOF
 else
   boxname=`printf "$HTTP_X_SGCC_TO" | base64`
   boxpath="../../data/box/$boxname"
   mkdir -p "$boxpath"
-  datapath="${boxpath}/$(date +%s%N).gpg"
+  msgid=`date +%s%N`
+  datapath="${boxpath}/${msgid}.gpg"
   gpg --dearmor <&0 --output "$datapath" 2>$resp
   if [[ $? -ne 0 ]]; then
     echo "$SERVER_PROTOCOL 500 Internal Server Error"
     rm $datapath
     [[ `ls -A $boxpath` ]] || rmdir $boxpath
+  else
+    echo "$msgid" > $resp
   fi
-  echo 'OK!' > $resp
 fi
 
 cat - $resp << EOF
