@@ -34,8 +34,12 @@ BigInt[] getCleanBoxFullList(string dirPath, size_t maxCount = 128) {
     return allFiles.map!(f => f[0]).array;
   auto filesToRemove = allFiles.length - maxCount;
   // remove oldest
-  foreach (fileInfo; allFiles[0 .. filesToRemove])
-    remove(fileInfo[1]);
+  try {
+    foreach (fileInfo; allFiles[0 .. filesToRemove])
+      remove(fileInfo[1]);
+  } catch (Exception e) {
+    stderr.writeln(e);
+  }
   // return
   return allFiles[filesToRemove .. $].map!(f => f[0]).array;
 }
