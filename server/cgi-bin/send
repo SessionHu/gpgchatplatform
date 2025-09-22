@@ -3,24 +3,24 @@
 resp=`mktemp`
 
 if [[ "$REQUEST_METHOD" == "OPTIONS" ]]; then
-  echo "$SERVER_PROTOCOL 204 No Content"
+  echo "$SERVER_PROTOCOL 204 No Content"
 elif [[ "$REQUEST_METHOD" != "POST" ]]; then
   cat > $resp << EOF
 Method not allowed
 EOF
-  echo "$SERVER_PROTOCOL 405 Method Not Allowed"
+  echo "$SERVER_PROTOCOL 405 Method Not Allowed"
 elif ! internal/checkemail.d $HTTP_X_SGCC_TO; then
   cat > $resp << EOF
 X-SGCC-To in header fields is not an Email address
 EOF
   echo "$SERVER_PROTOCOL 400 Bad Request"
 elif [[ -n "$CONTENT_TYPE" ]] && [[ "$CONTENT_TYPE" != "application/octet-stream" ]] && [[ "$CONTENT_TYPE" != 'text/plain' ]] && [[ "$CONTENT_TYPE" != "application/pgp-encrypted" ]]; then
-  echo "$SERVER_PROTOCOL 415 Unsupported Media Type"
+  echo "$SERVER_PROTOCOL 415 Unsupported Media Type"
   cat > $resp << EOF
 Content-Type in header fields is not supported
 EOF
 elif [[ "$HTTP_CONTENT_LENGTH" -gt 1024 ]]; then
-  echo "$SERVER_PROTOCOL 413 Request Entity Too Large"
+  echo "$SERVER_PROTOCOL 413 Request Entity Too Large"
   cat > $resp << EOF
 Content-Length in header fields is too large (>1024 bytes)
 EOF
@@ -32,7 +32,7 @@ else
   datapath="${boxpath}/${msgid}.gpg"
   gpg --dearmor <&0 --output "$datapath" 2>$resp
   if [[ $? -ne 0 ]]; then
-    echo "$SERVER_PROTOCOL 500 Internal Server Error"
+    echo "$SERVER_PROTOCOL 500 Internal Server Error"
     rm $datapath
     [[ `ls -A $boxpath` ]] || rmdir $boxpath
   else
