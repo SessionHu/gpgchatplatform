@@ -44,14 +44,14 @@ BigInt[] getCleanBoxFullList(string dirPath, size_t maxCount = 128) {
   return allFiles[filesToRemove .. $].map!(f => f[0]).array;
 }
 
-string getBoxItems(string email, bool retry = false) {
-  const boxdir = "../../data/box/" ~ cast(string)Base64.encode(cast(ubyte[])email);
+string getBoxItems(string keyfp, bool retry = false) {
+  const boxdir = "../../data/box/" ~ keyfp;
   if (!boxdir.exists) return "\n";
   const tss = getCleanBoxFullList(boxdir);
   const off = getOffsetFromEnv();
   const lzt = tss.filter!(e => e > off).map!(to!string).array;
   return lzt.length == 0 && retry && wait_for_new_file(boxdir.ptr, 10_000) == 1 ?
-    getBoxItems(email) : (lzt.join("\n") ~ '\n');
+    getBoxItems(keyfp) : (lzt.join("\n") ~ '\n');
 }
 
 int main() {
@@ -60,11 +60,11 @@ int main() {
   } else if (environment.get("REQUEST_METHOD") != "GET") {
     return writeResp("405 Method Not Allowed", "", "Method not allowed\n");
   }
-  const email = environment.get("HTTP_X_SGCC_TO");
-  if (!checkEmail(email))
-    return writeResp("400 Bad Request", "", "X-SGCC-To in header fields is not an Email address\n");
+  const keyfp = environment.get("HTTP_X_SGCC_TO");
+  if (!match(keyfp, `^[0-9A-F]{40}$`))
+    return writeResp("400 Bad Request", "", "X-SGCC-To in header fields is not PGP key fingerprint\n");
   try {
-    return writeResp("200 OK", "", getBoxItems(email, true));
+    return writeResp("200 OK", "", getBoxItems(keyfp, true));
   } catch (Exception e) {
     return writeResp("500 Internal Server Error", "", to!string(e));
   }

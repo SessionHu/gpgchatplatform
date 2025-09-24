@@ -3,15 +3,9 @@ module internal.utils;
 import std.conv : to;
 import std.process : environment;
 import std.regex : matchFirst, regex;
-import std.net.isemail : isEmail;
 
 import core.sys.posix.unistd : write, STDOUT_FILENO;
 import core.sys.posix.time : gmtime_r, time_t, time, tm, strftime;
-
-@safe pure
-bool checkEmail(string email) {
-  return !(email is null) && email.isEmail;
-}
 
 @safe
 string dateHeaderFieldNowWithCRLF() {

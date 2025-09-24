@@ -9,9 +9,9 @@ elif [[ "$REQUEST_METHOD" != "POST" ]]; then
 Method not allowed
 EOF
   echo "$SERVER_PROTOCOL 405 Method Not Allowed"
-elif ! internal/checkemail.d $HTTP_X_SGCC_TO; then
+elif grep -vqE '^[0-9A-Z]{40}$' <<< "$HTTP_X_SGCC_TO"; then
   cat > $resp << EOF
-X-SGCC-To in header fields is not an Email address
+X-SGCC-To in header fields is not PGP key fingerprint
 EOF
   echo "$SERVER_PROTOCOL 400 Bad Request"
 elif [[ -n "$CONTENT_TYPE" ]] && [[ "$CONTENT_TYPE" != "application/octet-stream" ]] && [[ "$CONTENT_TYPE" != 'text/plain' ]] && [[ "$CONTENT_TYPE" != "application/pgp-encrypted" ]]; then
@@ -25,8 +25,7 @@ elif [[ "$HTTP_CONTENT_LENGTH" -gt 1024 ]]; then
 Content-Length in header fields is too large (>1024 bytes)
 EOF
 else
-  boxname=`printf "$HTTP_X_SGCC_TO" | base64`
-  boxpath="../../data/box/$boxname"
+  boxpath="../../data/box/$HTTP_X_SGCC_TO"
   mkdir -p "$boxpath"
   msgid=`date +%s%N`
   datapath="${boxpath}/${msgid}.gpg"
