@@ -1,21 +1,21 @@
 #!/bin/bash
 
 if [ "$#" -lt 1 ]; then
-  echo "Usage: $0 <your_email> [offset]"
+  echo "Usage: $0 <your_keyfp> [offset]"
   exit 1
 fi
 
-your_email="$1"
+your_keyfp="$1"
 offset="$2"
 [[ -z "$offset" ]] && offset=0
 
 [[ -z "$HTTP_PREFIX" ]] && HTTP_PREFIX='http://0:8080'
 
-message_ids=`curl "${HTTP_PREFIX}/cgi-bin/watch?offset=$offset" -H "x-sgcc-to: $your_email" -vL`
+message_ids=`curl "${HTTP_PREFIX}/cgi-bin/watch?offset=$offset" -H "x-sgcc-to: $your_keyfp" -vL`
 
 for msgid in $message_ids; do
   curl "${HTTP_PREFIX}/cgi-bin/recv.d" \
-    -H "x-sgcc-to: $your_email" \
+    -H "x-sgcc-to: $your_keyfp" \
     -H "x-sgcc-fts: $msgid" \
     -vL | gpg -dv
 done
