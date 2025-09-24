@@ -2,7 +2,7 @@
 
 The SGCC Platform API provides a set of simple, stateless CGI endpoints for a `gpg`-based chat application. It allows for sending and receiving encrypted messages.
 
-## 1\. 发送消息 (Sending a Message)
+## Sending Message
 
 This endpoint is used to send an encrypted message to a recipient.
 
@@ -12,7 +12,7 @@ This endpoint is used to send an encrypted message to a recipient.
 
   * **Request Headers**:
 
-      * `X-SGCC-To`: The recipient's email address (e.g., `ex@mple.com`).
+      * `X-SGCC-To`: The recipient's PGP key fingerprint (e.g., `AAAAAAAAAA`).
       * `Content-Type`: `application/pgp-encrypted`
 
   * **Request Body**: The encrypted message content, as binary data. This is typically the output from a `gpg` command.
@@ -23,13 +23,13 @@ This endpoint is used to send an encrypted message to a recipient.
     gpg -vesr "ex@mple.com" < my_message.txt | \
     curl "http://0:8080/cgi-bin/send" \
       -X POST \
-      -H "X-SGCC-To: ex@mple.com" \
+      -H "X-SGCC-To: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" \
       -H "Content-Type: application/pgp-encrypted" \
       --data-binary @- \
       -vL
     ```
 
-## 2\. 列出消息 (Listing Messages)
+## Listing Messages
 
 This long-polling endpoint is used to retrieve a list of message IDs for a specific recipient.
 
@@ -43,17 +43,17 @@ This long-polling endpoint is used to retrieve a list of message IDs for a speci
 
   * **Request Headers**:
 
-      * `X-SGCC-To`: The recipient's email address (e.g., `ex@mple.com`).
+      * `X-SGCC-To`: The recipient's PGP key fingerprint.
 
   * **Response Body**: A list of message IDs, separated by line feeds (`\n`). A message ID is a nano-level timestamp.
 
   * **Example (using `curl`)**:
 
     ```bash
-    curl "http://0:8080/cgi-bin/watch" -H "X-SGCC-To: ex@mple.com" -vL
+    curl "http://0:8080/cgi-bin/watch" -H "X-SGCC-To: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" -vL
     ```
 
-## 3\. 接收消息 (Receiving a Message)
+## Receiving Message
 
 This endpoint is used to retrieve a specific encrypted message by its ID.
 
@@ -63,7 +63,7 @@ This endpoint is used to retrieve a specific encrypted message by its ID.
 
   * **Request Headers**:
 
-      * `X-SGCC-To`: The recipient's email address (e.g., `ex@mple.com`).
+      * `X-SGCC-To`: The recipient's PGP key fingerprint 
       * `X-SGCC-FTS`: The message ID (e.g., a nano-level timestamp like `1725114000000000000`).
 
   * **Response Body**: The encrypted message content, as binary data.
@@ -72,7 +72,7 @@ This endpoint is used to retrieve a specific encrypted message by its ID.
 
     ```bash
     curl "http://0:8080/cgi-bin/recv.d" \
-      -H "X-SGCC-To: ex@mple.com" \
+      -H "X-SGCC-To: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" \
       -H "X-SGCC-FTS: 1725114000000000000" \
       -vL | gpg -dv
     ```
