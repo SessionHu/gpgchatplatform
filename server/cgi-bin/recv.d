@@ -1,6 +1,5 @@
 #!/bin/env rdmd
 
-import std.base64 : Base64;
 import std.file : read, FileException;
 import std.process : environment;
 import std.stdio : stderr;
