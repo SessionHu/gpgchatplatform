@@ -42,7 +42,7 @@ fi
 cat - $resp << EOF
 Access-Control-Allow-Origin: *
 Access-Control-Allow-Methods: POST, OPTIONS
-Access-Control-Allow-Headers: X-SGCC-To
+Access-Control-Allow-Headers: Content-Type, X-SGCC-To
 Access-Control-Max-Age: 86400
 Allow: OPTIONS, POST
 Server: $SERVER_SOFTWARE $GATEWAY_INTERFACE (sgcc)

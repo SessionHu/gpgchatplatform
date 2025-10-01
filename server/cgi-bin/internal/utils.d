@@ -21,12 +21,12 @@ string dateHeaderFieldNowWithCRLF() {
   return to!string(buffer[0..l]);
 }
 
-int writeResp(string coderes, string headers, string payload, int ret = 0) {
+int writeResp(string coderes, string headers, string payload, string allowheaders = "X-SGCC-To", int ret = 0) {
   const cl = payload.length * payload[0].sizeof;
   const h = environment.get("SERVER_PROTOCOL") ~ ' ' ~ coderes ~ "\r\n" ~
     "Access-Control-Allow-Origin: *\r\n" ~
     "Access-Control-Allow-Methods: GET, OPTIONS\r\n" ~
-    "Access-Control-Allow-Headers: X-SGCC-To\r\n" ~
+    "Access-Control-Allow-Headers: " ~ allowheaders ~ "\r\n" ~
     "Access-Control-Max-Age: 86400\r\n" ~
     "Cache-Control: max-age=0\r\n" ~
     "Allow: OPTIONS, GET\r\n" ~
