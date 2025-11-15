@@ -14,7 +14,7 @@ offset="$2"
 message_ids=`curl "${HTTP_PREFIX}/cgi-bin/watch?offset=$offset" -H "x-sgcc-to: $your_keyfp" -vL`
 
 for msgid in $message_ids; do
-  curl "${HTTP_PREFIX}/cgi-bin/recv.d" \
+  curl "${HTTP_PREFIX}/cgi-bin/recv" \
     -H "x-sgcc-to: $your_keyfp" \
     -H "x-sgcc-fts: $msgid" \
     -vL | gpg -dv
