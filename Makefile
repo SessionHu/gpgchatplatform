@@ -1,4 +1,4 @@
-DC := $(shell command -v ldc2 || command -v gdc || command -v dmd)
+DC = $(shell command -v ldc2 || command -v gdc || command -v dmd)
 
 CFLAGS = -O2
 DFLAGS = -O2 -Iserver-src
@@ -6,7 +6,7 @@ DFLAGS = -O2 -Iserver-src
 all: server/index.html server/cgi-bin/send server/cgi-bin/watch server/cgi-bin/recv
 
 server:
-	mkdir $@
+	mkdir -p $@
 
 server/cgi-bin:
 	mkdir -p $@
@@ -18,10 +18,10 @@ server/cgi-bin/send: server-src/send.sh | server/cgi-bin
 	cp $< $@
 	chmod +x $@
 
-server/cgi-bin/watch: server-src/watcher.o server-src/watch.o server-src/utils.o | server/cgi-bin
+server/cgi-bin/watch: server-src/utils.o server-src/watcher.o server-src/watch.o | server/cgi-bin
 	$(DC) $(DFLAGS) $^ -of=$@
 
-server/cgi-bin/recv: server-src/recv.o server-src/utils.o | server/cgi-bin
+server/cgi-bin/recv: server-src/utils.o server-src/recv.o | server/cgi-bin
 	$(DC) $(DFLAGS) $^ -of=$@
 
 %.o: %.d
