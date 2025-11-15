@@ -5,7 +5,7 @@ import std.process : environment;
 import std.stdio : stderr;
 import std.regex : match;
 
-import internal.utils : writeResp;
+import utils : writeResp;
 
 string readMail(string keyfp, string fts) {
   const mailfile = "../../data/box/" ~ keyfp ~ '/' ~ fts ~ ".gpg";

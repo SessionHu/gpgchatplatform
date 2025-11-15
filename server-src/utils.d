@@ -1,5 +1,3 @@
-module internal.utils;
-
 import std.conv : to;
 import std.process : environment;
 import std.regex : matchFirst, regex;

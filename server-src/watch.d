@@ -1,5 +1,3 @@
-module internal.watch.watch;
-
 import std.stdio;
 import std.process;
 import std.file;
@@ -12,7 +10,7 @@ import std.bigint;
 import std.conv;
 import std.typecons;
 
-import internal.utils;
+import utils;
 
 extern(C) int wait_for_new_file(const char* dir_path, int timeout_ms);
 

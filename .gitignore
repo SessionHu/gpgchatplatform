@@ -3,4 +3,4 @@ data
 
 *.o
 
-server/cgi-bin/internal/watch/watch
+server/
