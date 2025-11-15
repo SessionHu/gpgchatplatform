@@ -22,7 +22,7 @@ This project is a work in progress. If you'd like to contribute, please feel fre
 * **Requirements:** C compiler, D compiler, GnuPG, Busybox, GNU coreutils, GNU Make, GNU findutils, GNU bash
 * **Compiling**: `make -j$(nproc)`
 * **Running:** `./start_server.sh` with an optional port number (default is 8080)
-* **Clients:** Example implementations of clients in various programming languages can be found in the [`clients`](clients) directory.
+* **Clients:** Example implementations of clients in various programming languages can be found in the [`client`](client) directory.
 
 ## License
 
