@@ -57,7 +57,7 @@ This long-polling endpoint is used to retrieve a list of message IDs for a speci
 
 This endpoint is used to retrieve a specific encrypted message by its ID.
 
-  * **URI**: `/cgi-bin/recv.d`
+  * **URI**: `/cgi-bin/recv`
 
   * **Method**: `GET`
 
