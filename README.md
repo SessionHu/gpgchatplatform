@@ -19,6 +19,11 @@ For detailed information on the available endpoints and how to use them, please 
 
 This project is a work in progress. If you'd like to contribute, please feel free to fork the repository and submit a pull request. We welcome all contributions, big or small!
 
+* **Requirements:** C compiler, D compiler, GnuPG, Busybox, GNU coreutils, GNU Make, GNU findutils, GNU bash
+* **Compiling**: `make -j$(nproc)`
+* **Running:** `./start_server.sh` with an optional port number (default is 8080)
+* **Clients:** Example implementations of clients in various programming languages can be found in the [`clients`](clients) directory.
+
 ## License
 
 This project is licensed under the **GPLv3** (GNU General Public License Version 3). Please see the [`LICENSE`](LICENSE) file for more details.
