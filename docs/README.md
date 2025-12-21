@@ -71,7 +71,7 @@ This endpoint is used to retrieve a specific encrypted message by its ID.
   * **Example (using `curl`)**:
 
     ```bash
-    curl "http://0:8080/cgi-bin/recv.d" \
+    curl "http://0:8080/cgi-bin/recv" \
       -H "X-SGCC-To: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" \
       -H "X-SGCC-FTS: 1725114000000000000" \
       -vL | gpg -dv
