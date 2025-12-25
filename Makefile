@@ -1,4 +1,4 @@
-DC = $(shell command -v ldc2 || command -v gdc || command -v dmd)
+DC = $(shell command -v ldc2 || command -v dmd)
 
 CFLAGS = -O2
 DFLAGS = -O2 -Iserver-src
