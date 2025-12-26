@@ -1,14 +1,15 @@
 # ---- Builder Stage ----
-FROM alpine:latest AS builder
+FROM debian:stable-slim AS builder
 
 # Install build dependencies
-RUN apk add --no-cache \
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+  clang \
   coreutils \
   findutils \
-  gcc \
   ldc \
-  make \
-  musl-dev
+  make && \
+  rm -rf /var/lib/apt/lists/*
 
 # Copy source code
 COPY . /app
@@ -21,14 +22,16 @@ RUN make -j$(nproc)
 
 
 # ---- Runner Stage ----
-FROM alpine:latest
+FROM debian:stable-slim
 
 # Install runtime dependencies
-RUN apk add --no-cache \
-  gnupg \
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+  bash \
   busybox \
   coreutils \
-  bash
+  gnupg && \
+  rm -rf /var/lib/apt/lists/*
 
 # Copy built artifacts from builder stage
 COPY --from=builder /app/server /app/server
