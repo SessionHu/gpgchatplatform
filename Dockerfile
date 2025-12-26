@@ -3,12 +3,12 @@ FROM alpine:latest AS builder
 
 # Install build dependencies
 RUN apk add --no-cache \
-    coreutils \
-    findutils \
-    gcc \
-    ldc \
-    linux-headers \
-    make
+  coreutils \
+  findutils \
+  gcc \
+  ldc \
+  make \
+  musl-dev
 
 # Copy source code
 COPY . /app
@@ -25,10 +25,10 @@ FROM alpine:latest
 
 # Install runtime dependencies
 RUN apk add --no-cache \
-    gnupg \
-    busybox \
-    coreutils \
-    bash
+  gnupg \
+  busybox \
+  coreutils \
+  bash
 
 # Copy built artifacts from builder stage
 COPY --from=builder /app/server /app/server
