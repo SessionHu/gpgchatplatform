@@ -44,12 +44,19 @@ BigInt[] getCleanBoxFullList(string dirPath, size_t maxCount = 128) {
 
 string getBoxItems(string keyfp, bool retry = false) {
   const boxdir = "../../data/box/" ~ keyfp;
-  if (!boxdir.exists) return "\n";
+  mkdirRecurse(dirName(boxdir));
   const tss = getCleanBoxFullList(boxdir);
   const off = getOffsetFromEnv();
   const lzt = tss.filter!(e => e > off).map!(to!string).array;
-  return lzt.length == 0 && retry && wait_for_new_file(boxdir.ptr, 10_000) == 1 ?
-    getBoxItems(keyfp) : (lzt.join("\n") ~ '\n');
+  if (lzt.length == 0 && retry) {
+    int wait_res = wait_for_new_file(boxdir.ptr, 10_000);
+    if (wait_res == 1) { // file created in existing dir
+      return getBoxItems(keyfp, false);
+    } else if (wait_res == 2) { // dir itself was created
+      return getBoxItems(keyfp, true); // re-run logic, allow another wait
+    }
+  }
+  return lzt.join("\n") ~ '\n';
 }
 
 int main() {
