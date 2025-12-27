@@ -26,15 +26,16 @@ Content-Length in header fields is too large (>1024 bytes)
 EOF
 else
   boxpath="../../data/box/$HTTP_X_SGCC_TO"
-  mkdir -p "$boxpath"
   msgid=`date +%s%N`
   datapath="${boxpath}/${msgid}.gpg"
-  gpg --dearmor <&0 --output "$datapath" 2>$resp
+  tmpf=`mktemp`
+  gpg --dearmor <&0 --output "$tmpf" 2>$resp
   if [[ $? -ne 0 ]]; then
     echo "$SERVER_PROTOCOL 500 Internal Server Error"
-    rm $datapath
-    [[ `ls -A $boxpath` ]] || rmdir $boxpath
+    rm $tmpf
   else
+    mkdir -p "$boxpath"
+    mv "$tmpf" "$datapath"
     echo "$msgid" > $resp
   fi
 fi
