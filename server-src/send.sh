@@ -29,7 +29,7 @@ else
   msgid=`date +%s%N`
   datapath="${boxpath}/${msgid}.gpg"
   tmpf=`mktemp`
-  gpg --dearmor <&0 --output "$tmpf" 2>$resp
+  gpg --batch --no-tty --dearmor <&0 --output "$tmpf" 2>$resp
   if [[ $? -ne 0 ]]; then
     echo "$SERVER_PROTOCOL 500 Internal Server Error"
     rm $tmpf
