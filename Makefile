@@ -1,4 +1,7 @@
 DC = $(shell command -v ldc2 || command -v dmd)
+ifeq ($(DC),)
+$(error "No D compiler found. Please install LDC or DMD first! GDC is not supported yet.")
+endif
 
 CFLAGS = -O2
 DFLAGS = -O2 -Iserver-src
