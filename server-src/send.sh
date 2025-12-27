@@ -9,7 +9,7 @@ elif [[ "$REQUEST_METHOD" != "POST" ]]; then
 Method not allowed
 EOF
   echo "$SERVER_PROTOCOL 405 Method Not Allowed"
-elif grep -vqE '^[0-9A-Z]{40}$' <<< "$HTTP_X_SGCC_TO"; then
+elif grep -vqE '^[0-9A-F]{40}$' <<< "$HTTP_X_SGCC_TO"; then
   cat > $resp << EOF
 X-SGCC-To in header fields is not PGP key fingerprint
 EOF
