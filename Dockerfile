@@ -45,3 +45,7 @@ EXPOSE 8080
 
 # Set entrypoint
 ENTRYPOINT ["./start_server.sh"]
+
+# Set labels
+LABEL org.opencontainers.image.source=https://github.com/SessionHu/gpgchatplatform
+LABEL org.opencontainers.image.licenses=GPL-3.0-or-later
